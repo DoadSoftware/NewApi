@@ -15,6 +15,9 @@ public class Configurations {
 	@XmlElement(name="apiMatchName")
 	private String apiMatchName;
 	
+	@XmlElement(name="preMatchName")
+	private String preMatchName;
+	
 	@XmlElement(name="source")
 	private String source;
 	
@@ -42,11 +45,12 @@ public class Configurations {
 
 	
 
-	public Configurations(String broadcaster, String apiMatchName, String source, String destination,String updateTime, String ipAddress,
+	public Configurations(String broadcaster, String apiMatchName,String preMatchName , String source, String destination,String updateTime, String ipAddress,
 			int portNumber) {
 		super();
 		this.broadcaster = broadcaster;
 		this.apiMatchName = apiMatchName;
+		this.preMatchName = preMatchName;
 		this.source = source;
 		this.destination = destination;
 		this.updateTime = updateTime;
@@ -54,19 +58,21 @@ public class Configurations {
 		this.portNumber = portNumber;
 	}
 	
-	public Configurations(String broadcaster, String apiMatchName, String source, String destination,String updateTime) {
+	public Configurations(String broadcaster, String apiMatchName, String preMatchName, String source, String destination,String updateTime) {
 		super();
 		this.broadcaster = broadcaster;
 		this.apiMatchName = apiMatchName;
+		this.preMatchName = preMatchName;
 		this.source = source;
 		this.destination = destination;
 		this.updateTime = updateTime;
 	}
 
-	public Configurations(String broadcaster, String apiMatchName, String source, String destination,String updateTime, String fixture_id) {
+	public Configurations(String broadcaster, String apiMatchName,String preMatchName, String source, String destination,String updateTime, String fixture_id) {
 		super();
 		this.broadcaster = broadcaster;
 		this.apiMatchName = apiMatchName;
+		this.preMatchName = preMatchName;
 		this.source = source;
 		this.destination = destination;
 		this.updateTime = updateTime;
@@ -104,7 +110,13 @@ public class Configurations {
 	public void setApiMatchName(String apiMatchName) {
 		this.apiMatchName = apiMatchName;
 	}
-
+	
+	public String getPreMatchName() {
+		return preMatchName;
+	}
+	public void setPreMatchName(String preMatchName) {
+		this.preMatchName = preMatchName;
+	}
 	public String getIpAddress() {
 		return ipAddress;
 	}

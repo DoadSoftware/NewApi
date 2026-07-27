@@ -90,6 +90,7 @@ public class IndexController
 	public static String source_path2;
 	public static String source_path3;
 	public static String match_name;
+	public static String prematch_name;
 	public static String destination_path;
 	public static String destination_path1;
 	public static String destination_path2;
@@ -123,6 +124,7 @@ public class IndexController
 	public String initialisePage(ModelMap model,
 			@ModelAttribute("session_selected_broadcaster") String session_selected_broadcaster,
 			@ModelAttribute("session_api_match_name") String session_api_match_name,
+			@ModelAttribute("session_pre_match_name") String session_pre_match_name,
 			@ModelAttribute("session_source_path") String session_source_path,
 			@ModelAttribute("session_destination_path") String session_destination_path,
 			@ModelAttribute("session_update_time") String session_update_time,
@@ -161,6 +163,7 @@ public class IndexController
 			@ModelAttribute("session_configuration") Configurations session_configuration,
 			@RequestParam(value = "configuration_file_name", required = false, defaultValue = "") String configuration_file_name,
 			@RequestParam(value = "api_match_name", required = false, defaultValue = "") String api_match_name,
+			@RequestParam(value = "pre_match_name", required = false, defaultValue = "") String pre_match_name,
 			@RequestParam(value = "source_file_path", required = false, defaultValue = "") String source_file_path,
 			@RequestParam(value = "destination_file_path", required = false, defaultValue = "") String destination_file_path,
 			@RequestParam(value = "vizPortNumber", required = false, defaultValue = "") String vizPortNumber,
@@ -183,6 +186,7 @@ public class IndexController
 			session_selected_broadcaster = selectedBroadcaster;
 			source_path = source_file_path;
 			match_name =  api_match_name;
+			prematch_name =  pre_match_name;
 			destination_path = destination_file_path;
 			session_update_time = update_time;
 			api_pre_match_team_stats = new ArrayList<Api_pre_match>();
@@ -191,14 +195,14 @@ public class IndexController
 			ApiUtil.FOOTBALL_FIXTURE_ID = fixture_id;
 			switch (session_selected_broadcaster) {
 			case ApiUtil.ISPL:
-				session_configuration = new Configurations(selectedBroadcaster,"",source_file_path,destination_file_path,"","",0);
+				session_configuration = new Configurations(selectedBroadcaster,"","",source_file_path,destination_file_path,"","",0);
 				break;
 			case ApiUtil.GOLF:
-				session_configuration = new Configurations(selectedBroadcaster,match_name,"","","","",0);
+				session_configuration = new Configurations(selectedBroadcaster,match_name,"","","","","",0);
 				break;
 			case ApiUtil.KHELO_INDIA: case ApiUtil.SWIMMING_TSR:  case ApiUtil.TENNIS: case ApiUtil.KABADDI_KADAMBA:
 			case ApiUtil.KABADDI:
-				session_configuration = new Configurations(selectedBroadcaster,match_name,source_file_path,destination_file_path,update_time,
+				session_configuration = new Configurations(selectedBroadcaster,match_name, pre_match_name,source_file_path,destination_file_path,update_time,
 						vizIPAddress,Integer.valueOf(vizPortNumber));
 				if(vizPortNumber != null) {
 					session_socket = new Socket(vizIPAddress, Integer.valueOf(vizPortNumber));
@@ -237,7 +241,7 @@ public class IndexController
 				break;
 			case ApiUtil.KABADDI_KADAMBA:
 				JAXBContext.newInstance(Configurations.class).createMarshaller().marshal(session_configuration, 
-						new File(ApiUtil.KHELO_INDIA_DIRECTORY + ApiUtil.CONFIGURATIONS_DIRECTORY + configuration_file_name));
+						new File(ApiUtil.SPORTS_DIRECTORY + ApiUtil.API_CONFIGURATIONS_DIRECTORY + configuration_file_name));
 				
 				if(new File(destination_path + match_name.replace(".xml", ".json")).exists()) {
 					session_match = new ObjectMapper().readValue(new File(destination_path + match_name.replace(".xml", ".json")), Match.class);
@@ -287,7 +291,7 @@ public class IndexController
 		}
 	}
 	
-	@RequestMapping(value = {"/processApiProcedures"}, method={RequestMethod.GET,RequestMethod.POST})    
+	@RequestMapping(value = {"/processApiProcedures.html"}, method={RequestMethod.GET,RequestMethod.POST})    
 	public @ResponseBody String processApiProcedures(
 			@ModelAttribute("session_configuration") Configurations session_configuration,
 			@ModelAttribute("session_api_match_name") String session_api_match_name,
@@ -997,7 +1001,7 @@ public class IndexController
 				case ApiUtil.KABADDI_KADAMBA:
 					switch(whatToProcess.toUpperCase()) {
 					 case "KABADDI_PRE_MATCH_DATA":
-						 api_pre_match_team_stats = ApiFunctions.getPreMatchDatafromXML(source_path,"pre-match_2m.xml");
+						 api_pre_match_team_stats = ApiFunctions.getPreMatchDatafromXML(source_path,"pre-match_87.xml");
 						 new ObjectMapper().writeValue(new File(destination_path + "pre-match_2m.json"), api_pre_match_team_stats);
 						 return objectMapper.writeValueAsString(session_match).toString();
 					 case "KABADDI_STATS": case "READ-APIMATCH-AND-POPULATE":
@@ -1029,8 +1033,10 @@ public class IndexController
 				case ApiUtil.KABADDI:
 					switch(whatToProcess.toUpperCase()) {
 					 case "KABADDI_PRE_MATCH_DATA":
-						 api_pre_match_team_stats = ApiFunctions.getPreMatchDatafromXML(source_path,"pre-match_2m.xml");
-						 new ObjectMapper().writeValue(new File(destination_path + "pre-match_2m.json"), api_pre_match_team_stats);
+						// api_pre_match_team_stats = ApiFunctions.getPreMatchDatafromXML(source_path,"pre-match_87m.xml");
+						 api_pre_match_team_stats = ApiFunctions.getPreMatchDatafromXML(source_path,prematch_name);
+				//		 new ObjectMapper().writeValue(new File(destination_path + "pre-match_2m.json"), api_pre_match_team_stats);
+						 new ObjectMapper().writeValue(new File(destination_path + prematch_name), api_pre_match_team_stats);
 						 return objectMapper.writeValueAsString(session_match).toString();
 					 case "KABADDI_STATS": case "READ-APIMATCH-AND-POPULATE":
 						 try {

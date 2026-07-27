@@ -210,6 +210,13 @@
 		             	class="form-control form-control-sm floatlabel"></input>
 			    </div>
 			  </div>
+			 <div id="pre_match_name" class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
+			    <label for="pre_match_name" class="col-sm-4 col-form-label text-left">Pre Match Name </label>
+			    <div class="col-sm-6 col-md-6">
+		             <input type="text" id="pre_match_name" name="pre_match_name" value="${session_configuration.preMatchName}"
+		             	class="form-control form-control-sm floatlabel"></input>
+			    </div>
+			  </div>	
 			  <div id="source_file_path" class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
 			    <label for="source_file_path" class="col-sm-4 col-form-label text-left">Source Path </label>
 			    <div class="col-sm-6 col-md-6">

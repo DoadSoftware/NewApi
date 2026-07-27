@@ -56,6 +56,7 @@ function initialiseForm(whatToProcess,dataToProcess)
 		document.getElementById('configuration_file_name').value = $('#select_configuration_file option:selected').val();
 		document.getElementById('selectedBroadcaster').value = dataToProcess.broadcaster;
 		document.getElementById('api_match_name').value = dataToProcess.apiMatchName;
+		document.getElementById('pre_match_name').value = dataToProcess.preMatchName;
 		document.getElementById('source_file_path').value = dataToProcess.source;
 		document.getElementById('destination_file_path').value = dataToProcess.destination;
 		document.getElementById('update_time').value = dataToProcess.updateTime;
@@ -75,6 +76,7 @@ function initialiseForm(whatToProcess,dataToProcess)
     }else if ($('#selectedBroadcaster').val().toUpperCase() === 'KABADDI' ||
     	 $('#selectedBroadcaster').val().toUpperCase()  === 'KABADDI_GIPKL') {
         $('#api_match_name').show();
+		$('#pre_match_name').show();	
         $('#source_file_path').show();
         $('#destination_file_path').show();
         $('#update_time').hide();
@@ -448,6 +450,7 @@ function processUserSelection(whichInput)
                     $('#fixture_id').show();
                 }else if ($(this).val() === 'KABADDI' || $(this).val() === 'KABADDI_GIPKL') {
                     $('#api_match_name').show();
+					$('#pre_match_name').show();
                     $('#source_file_path').show();
                     $('#destination_file_path').show();
                     $('#update_time').hide();
@@ -599,6 +602,7 @@ function processApiProcedures(whatToProcess)
 				            $('#vizIPAddress_div').hide();
 				        }else if ( $(this).val() === 'KABADDI' || $(this).val() === 'KABADDI_GIPKL') {
 				            $('#api_match_name').show();
+							$('#pre_match_name').show();	
 				            $('#source_file_path').show();
 				            $('#destination_file_path').show();
 				            $('#update_time').hide();

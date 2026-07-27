@@ -48,7 +48,7 @@ public class ApiDaoImpl implements ApiDao {
 
             return sessionFactory.getCurrentSession()
                     .createQuery(
-                            "from Team where TeamId = :teamId",
+                            "from Team t where t.teamId = :teamId",
                             Team.class)
                     .setParameter("teamId", Integer.parseInt(valueToProcess))
                     .uniqueResult();
