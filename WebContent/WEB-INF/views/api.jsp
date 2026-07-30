@@ -140,6 +140,24 @@
     </div>
   </div>
  </div>
+ 	<table class="table table-bordered table-striped text-center" style="width:350px; margin:10px auto;">
+    <thead class="table-dark">
+        <tr>
+            <th>Key Press</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><b>F1</b></td>
+            <td>Current Match</td>
+        </tr>
+        <tr>
+            <td><b>F2</b></td>
+            <td>Pre Match</td>
+        </tr>
+    </tbody>
+</table>		
  <input type="hidden" name="selectedBroadcaster" id="selectedBroadcaster" value="${session_selected_broadcaster}"/>
  <input type="hidden" name="api_match_name" id="api_match_name" value="${session_api_match_name}"/>
  <input type="hidden" name="source_file_path" id="source_file_path" value="${session_source_path}"/>

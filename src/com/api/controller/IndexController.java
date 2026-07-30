@@ -143,14 +143,14 @@ public class IndexController
 			}
 		}));
 		
-		if(new File(ApiUtil.SPORTS_DIRECTORY + ApiUtil.API_CONFIGURATIONS_DIRECTORY + "output.xml").exists()) {
+		if(new File(ApiUtil.SPORTS_DIRECTORY + ApiUtil.API_CONFIGURATIONS_DIRECTORY + "api.xml").exists()) {
 			session_configuration = (Configurations)JAXBContext.newInstance(
 					Configurations.class).createUnmarshaller().unmarshal(
-					new File(ApiUtil.SPORTS_DIRECTORY + ApiUtil.API_CONFIGURATIONS_DIRECTORY + "output.xml"));
+					new File(ApiUtil.SPORTS_DIRECTORY + ApiUtil.API_CONFIGURATIONS_DIRECTORY + "api.xml"));
 		} else {
 			session_configuration = new Configurations();
 			JAXBContext.newInstance(Configurations.class).createMarshaller().marshal(session_configuration, 
-					new File(ApiUtil.SPORTS_DIRECTORY + ApiUtil.API_CONFIGURATIONS_DIRECTORY + "output.xml"));
+					new File(ApiUtil.SPORTS_DIRECTORY + ApiUtil.API_CONFIGURATIONS_DIRECTORY + "api.xml"));
 		}
 		
 		session_selected_broadcaster = "";
@@ -1036,7 +1036,7 @@ public class IndexController
 						// api_pre_match_team_stats = ApiFunctions.getPreMatchDatafromXML(source_path,"pre-match_87m.xml");
 						 api_pre_match_team_stats = ApiFunctions.getPreMatchDatafromXML(source_path,prematch_name);
 				//		 new ObjectMapper().writeValue(new File(destination_path + "pre-match_2m.json"), api_pre_match_team_stats);
-						 new ObjectMapper().writeValue(new File(destination_path + prematch_name), api_pre_match_team_stats);
+						 new ObjectMapper().writeValue(new File(destination_path + prematch_name.replace(".xml", ".json")), api_pre_match_team_stats);
 						 return objectMapper.writeValueAsString(session_match).toString();
 					 case "KABADDI_STATS": case "READ-APIMATCH-AND-POPULATE":
 						 try {
