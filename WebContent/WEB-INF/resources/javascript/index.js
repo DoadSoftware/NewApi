@@ -322,10 +322,18 @@ function processUserSelectionData(whatToProcess,dataToProcess){
 		case 'CRICKET':
 		switch(dataToProcess){
 				case 112:
+					processApiProcedures('CRICKET_BATTING_BUZZER');
+					graphics = 'CRICKET_BATTING_BUZZER';
+					break;
+				case 113:
+					processApiProcedures('CRICKET_BOWLING_BUZZER');
+					graphics = 'CRICKET_BOWLING_BUZZER';
+					break;
+				case 114:
 					processApiProcedures('CRICKET_BATTERSTATS');
 					graphics = 'CRICKET_BATTERSTATS';
 					break;
-				case 113:
+				case 115:
 					processApiProcedures('CRICKET_BOWLERSTATS');
 					graphics = 'CRICKET_BOWLERSTATS';
 					break;
@@ -731,6 +739,7 @@ function processApiProcedures(whatToProcess)
 			case 'FOOTBALL_MATCH_POSSESSION_VALUES': case 'FOOTBALL_MATCH_MOMENTUM': case 'POPULATE-PLAYER_MATCH_EVENT': case 'FOOTBALL_LIVE_TRACKING':
 			case 'FOOTBALL_GOALS_EXPECTED': case'FOOTBALL_MATCH_INSIGHTS': case'LIVE_DATA':case'SEASONAL_DATA': case 'CRICKET_BOWLERSTATS':case 'CRICKET_BATTERSTATS':
 			case 'FOOTBALL_MATCH_PREVIEW': case 'FOOTBALL_MATCH_INSIGHTS2':case 'BASKETBALL_PRE_MATCH': case 'BASKETBALL_STATS':case 'FOOTBALL_STATS':case 'FOOTBALL_PRE_MATCH':
+			case 'CRICKET_BATTING_BUZZER': case 'CRICKET_BOWLING_BUZZER':
 				alert('File created Successfully')
 				
 				break;		

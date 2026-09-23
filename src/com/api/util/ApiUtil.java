@@ -6,6 +6,7 @@ public class ApiUtil {
 	
 	public final static String SPORTS_DIRECTORY = "C:/Sports/";
 	public final static String KHELO_INDIA_DIRECTORY = "C:/Sports/KheloIndia/";
+	public final static String CRICKET_DIRECTORY = "C:/Sports/Cricket/";
 	public final static String KABADDI_DIRECTORY = "Kabaddi/";
 	public final static String TENNIS_DIRECTORY = "Tennis/";
 	public final static String SOURCE_DIRECTORY = "Source/";

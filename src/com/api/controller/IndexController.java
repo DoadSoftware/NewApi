@@ -226,10 +226,14 @@ public class IndexController
 			case ApiUtil.SWIMMING_TSR:
 				JAXBContext.newInstance(Configurations.class).createMarshaller().marshal(session_configuration, 
 						new File(ApiUtil.KHELO_INDIA_DIRECTORY + ApiUtil.CONFIGURATIONS_DIRECTORY + configuration_file_name));
-			case ApiUtil.TENNIS: case ApiUtil.Cricket:
+			case ApiUtil.TENNIS:
 				JAXBContext.newInstance(Configurations.class).createMarshaller().marshal(session_configuration, 
 						new File(ApiUtil.KHELO_INDIA_DIRECTORY + ApiUtil.CONFIGURATIONS_DIRECTORY + configuration_file_name));
 				break;
+			case ApiUtil.Cricket:
+				JAXBContext.newInstance(Configurations.class).createMarshaller().marshal(session_configuration, 
+						new File(ApiUtil.SPORTS_DIRECTORY + ApiUtil.API_CONFIGURATIONS_DIRECTORY + configuration_file_name));
+				break;	
 			case ApiUtil.FOOTBALL:
 				access_token = ApiFunctions.getAccessToken();
 				JAXBContext.newInstance(Configurations.class).createMarshaller().marshal(session_configuration, 
@@ -614,6 +618,18 @@ public class IndexController
 				            destination_path = "C:/Sports/Cricket/BATTER_STATS.json";
 				            ApiFunctions.cricketJsonToFile(source_path, destination_path);
 				            return objectMapper.writeValueAsString(null).toString();
+				            
+				        case "CRICKET_BATTING_BUZZER":
+				            source_path = "http://82.25.110.45/api/batting-buzzer-list";
+				            destination_path = "C:/Sports/Cricket/BATTING_BUZZER.json";
+				            ApiFunctions.cricketJsonToFile(source_path, destination_path);
+				            return objectMapper.writeValueAsString(null).toString();
+
+				        case "CRICKET_BOWLING_BUZZER":
+				            source_path = "http://82.25.110.45/api/bowling-buzzer-list";
+				            destination_path = "C:/Sports/Cricket/BOWLING_BUZZER.json";
+				            ApiFunctions.cricketJsonToFile(source_path, destination_path);
+				            return objectMapper.writeValueAsString(null).toString();
 
 				        case "READ-APIMATCH-AND-POPULATE":
 				            switch (valueToProcess.toUpperCase()) {
@@ -627,6 +643,18 @@ public class IndexController
 				                case "CRICKET_BATTERSTATS":
 				                    source_path = "https://cloud.cricket-21.com/cricketapi/api/master/CricketStatsAPI?ReportID=101&Competition=2725&type=json";
 				                    destination_path = "C:/Sports/Cricket/BATTER_STATS.json";
+				                    ApiFunctions.cricketJsonToFile(source_path, destination_path);
+				                    return objectMapper.writeValueAsString(null).toString();
+				                    
+				                case "CRICKET_BATTING_BUZZER":
+				                    source_path = "http://82.25.110.45/api/batting-buzzer-list";
+				                    destination_path = "C:/Sports/Cricket/BATTING_BUZZER.json";
+				                    ApiFunctions.cricketJsonToFile(source_path, destination_path);
+				                    return objectMapper.writeValueAsString(null).toString();
+
+				                case "CRICKET_BOWLING_BUZZER":
+				                    source_path = "http://82.25.110.45/api/bolling-buzzer-list";
+				                    destination_path = "C:/Sports/Cricket/BOWLING_BUZZER.json";
 				                    ApiFunctions.cricketJsonToFile(source_path, destination_path);
 				                    return objectMapper.writeValueAsString(null).toString();
 				            }
