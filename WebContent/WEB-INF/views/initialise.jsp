@@ -187,11 +187,12 @@
 			    <div class="col-sm-6 col-md-6">
 			      <select id="selectedBroadcaster" name="selectedBroadcaster" class="browser-default custom-select custom-select-sm" 
 			      		onchange="processUserSelection(this)">
+					  <option value="ASIAN_HOCKEY_CHAMPIONS">Asian Hockey Champions</option>
 			      	  <option value="Football">Football</option>
-			      	  <option value="Cricket">cricket</option>
-			      	   <option value="AFC_Football">AFC Football</option>
+			      	  <option value="Cricket">Cricket</option>
+			      	  <option value="AFC_Football">AFC Football</option>
 			      	  <option value="KABADDI">KABADDI</option>
-			      	   <option value="KABADDI_GIPKL">KABADDI GIPKL</option>
+			      	  <option value="KABADDI_GIPKL">KABADDI GIPKL</option>
 			          <option value="KABADDI_KADAMBA">KHELO INDIA KABADDI KADAMBA</option>
 			          <option value="Tennis">Tennis</option>
 			          <option value="Basketball">Basketball</option>
@@ -203,6 +204,18 @@
 			      </select>
 			    </div>
 			  </div>
+			<div id="hockey_source_url_div" class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px; display:none;">
+			    <label for="hockey_source_url" class="col-sm-4 col-form-label text-left">Individual Goal Scorer URL</label>
+			    <div class="col-sm-6 col-md-6">
+			        <input type="text" id="hockey_source_url" name="hockey_source_url" value="${session_configuration.competitionUrl}" class="form-control form-control-sm floatlabel" placeholder="https://tms.fih.ch/competitions/1942">
+			    </div>
+			</div>
+			<div id="hockey_json_folder_div" class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px; display:none;">
+			    <label for="hockey_json_folder" class="col-sm-4 col-form-label text-left">JSON Folder</label>
+			    <div class="col-sm-6 col-md-6">
+			        <input type="text" id="hockey_json_folder" name="hockey_json_folder" value="${empty session_configuration.jsonOutputFolder ? 'C:\\Sports\\Hockey\\' : session_configuration.jsonOutputFolder}" class="form-control form-control-sm floatlabel" placeholder="C:\Sports\Hockey\">
+			    </div>
+			</div>
 			  <div id="api_match_name" class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
 			    <label for="api_match_name" class="col-sm-4 col-form-label text-left">Api Match Name </label>
 			    <div class="col-sm-6 col-md-6">

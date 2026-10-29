@@ -39,11 +39,15 @@ public class Configurations {
 	@XmlElement(name="fixture_id")
 	private String fixture_id;
 	
+	@XmlElement(name="competitionUrl")
+	private String competitionUrl;
+	
+	@XmlElement(name="jsonOutputFolder")
+	private String jsonOutputFolder;
+	
 	public Configurations() {
 		super();
 	}
-
-	
 
 	public Configurations(String broadcaster, String apiMatchName,String preMatchName , String source, String destination,String updateTime, String ipAddress,
 			int portNumber) {
@@ -77,6 +81,22 @@ public class Configurations {
 		this.destination = destination;
 		this.updateTime = updateTime;
 		this.fixture_id = fixture_id;
+	}
+
+	public String getCompetitionUrl() {
+		return competitionUrl;
+	}
+
+	public void setCompetitionUrl(String competitionUrl) {
+		this.competitionUrl = competitionUrl;
+	}
+
+	public String getJsonOutputFolder() {
+		return jsonOutputFolder;
+	}
+
+	public void setJsonOutputFolder(String jsonOutputFolder) {
+		this.jsonOutputFolder = jsonOutputFolder;
 	}
 
 	public String getBroadcaster() {

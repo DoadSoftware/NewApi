@@ -170,7 +170,9 @@ public class IndexController
 			@RequestParam(value = "vizIPAddress", required = false, defaultValue = "") String vizIPAddress,
 			@RequestParam(value = "update_time", required = false, defaultValue = "") String update_time,
 			@RequestParam(value = "fixture_id", required = false, defaultValue = "") String fixture_id,
-			@RequestParam(value = "selectedBroadcaster", required = false, defaultValue = "") String selectedBroadcaster) 
+			@RequestParam(value = "selectedBroadcaster", required = false, defaultValue = "") String selectedBroadcaster,
+			@RequestParam(value = "competitionUrl", required = false, defaultValue = "https://tms.fih.ch/competitions/1942") String competitionUrl,
+			@RequestParam(value = "jsonOutputFolder", required = false, defaultValue = "C:\\Sports\\Hockey\\") String jsonOutputFolder) 
 					throws Exception 
 	{
 		if(current_date == null || current_date.isEmpty()) {
@@ -194,6 +196,13 @@ public class IndexController
 			api_tennis_team_stats = new ArrayList<Api_tennis>();
 			ApiUtil.FOOTBALL_FIXTURE_ID = fixture_id;
 			switch (session_selected_broadcaster) {
+			case "ASIAN_HOCKEY_CHAMPIONS":
+			    session_configuration = new Configurations();
+			    session_configuration.setBroadcaster(selectedBroadcaster);
+			    session_configuration.setCompetitionUrl(competitionUrl.trim());
+			    session_configuration.setJsonOutputFolder(jsonOutputFolder.trim());
+				IndexController.session_configuration = session_configuration;			
+			    break;
 			case ApiUtil.ISPL:
 				session_configuration = new Configurations(selectedBroadcaster,"","",source_file_path,destination_file_path,"","",0);
 				break;
@@ -243,6 +252,9 @@ public class IndexController
 				JAXBContext.newInstance(Configurations.class).createMarshaller().marshal(session_configuration, 
 						new File(ApiUtil.SPORTS_DIRECTORY + ApiUtil.API_CONFIGURATIONS_DIRECTORY + configuration_file_name));
 				break;
+			case "ASIAN_HOCKEY_CHAMPIONS":
+			    JAXBContext.newInstance(Configurations.class).createMarshaller().marshal(session_configuration, new File(ApiUtil.SPORTS_DIRECTORY + ApiUtil.API_CONFIGURATIONS_DIRECTORY + configuration_file_name));
+			    break;
 			case ApiUtil.KABADDI_KADAMBA:
 				JAXBContext.newInstance(Configurations.class).createMarshaller().marshal(session_configuration, 
 						new File(ApiUtil.SPORTS_DIRECTORY + ApiUtil.API_CONFIGURATIONS_DIRECTORY + configuration_file_name));
@@ -582,6 +594,11 @@ public class IndexController
 		default:
 			if(session_selected_broadcaster != null) {
 				switch (session_selected_broadcaster) {
+				case "ASIAN_HOCKEY_CHAMPIONS":
+				    if ("READ-APIMATCH-AND-POPULATE".equalsIgnoreCase(whatToProcess) && "ASIAN_HOCKEY_GOAL_SCORERS".equalsIgnoreCase(valueToProcess)) {
+				        return readAsianHockeyGoalScorers();
+				    }
+				    return objectMapper.writeValueAsString(null).toString();
 				case ApiUtil.GOLF:
 					switch(whatToProcess.toUpperCase()) {
 					case "READ-APIMATCH-AND-POPULATE":
@@ -1117,4 +1134,83 @@ public class IndexController
 		}
 		return objectMapper.writeValueAsString(null).toString();
 	}
+	
+	private String readAsianHockeyGoalScorers() {
+	    ObjectNode hockeyResponse = objectMapper.createObjectNode();
+	    try {
+	        if (session_configuration == null || !"ASIAN_HOCKEY_CHAMPIONS".equals(session_configuration.getBroadcaster())) {
+	            hockeyResponse.put("status", "failed");
+	            hockeyResponse.put("error", "Asian Hockey Champions broadcaster is not selected");
+	            return hockeyResponse.toString();
+	        }
+	        String hockeyUrl = session_configuration.getCompetitionUrl();
+	        String hockeyOutputFolder = session_configuration.getJsonOutputFolder();
+			System.out.println("Hockey URL: " + hockeyUrl);
+			System.out.println("Hockey output folder: " + hockeyOutputFolder);
+	        if (hockeyUrl == null || hockeyUrl.trim().isEmpty()) hockeyUrl = "https://tms.fih.ch/competitions/1942";
+	        if (hockeyOutputFolder == null || hockeyOutputFolder.trim().isEmpty()) hockeyOutputFolder = "C:\\Sports\\Hockey\\";
+	        org.jsoup.nodes.Document hockeyDocument = org.jsoup.Jsoup.connect(hockeyUrl.trim()).userAgent("Mozilla/5.0").timeout(20000).get();
+	        org.jsoup.select.Elements hockeyTables = hockeyDocument.select("table");
+	        org.jsoup.nodes.Element scorerTable = null;
+	        int headerRowIndex = -1;
+	        for (org.jsoup.nodes.Element table : hockeyTables) {
+	            org.jsoup.select.Elements rows = table.select("tr");
+	            for (int r = 0; r < rows.size(); r++) {
+	                org.jsoup.select.Elements cells = rows.get(r).select("th,td");
+	                List<String> headers = new ArrayList<>();
+	                for (org.jsoup.nodes.Element cell : cells) headers.add(cell.text().trim().replaceAll("\\s+", " ").toLowerCase());
+	                if (headers.contains("player") && headers.contains("team") && headers.contains("fg") && headers.contains("pc") && headers.contains("ps") && headers.contains("goals")) {
+	                    scorerTable = table;
+	                    headerRowIndex = r;
+	                    break;
+	                }
+	            }
+	            if (scorerTable != null) break;
+	        }
+	        if (scorerTable == null) {
+	            hockeyResponse.put("status", "failed");
+	            hockeyResponse.put("error", "Individual Goal Scorers table was not found on the supplied URL");
+	            return hockeyResponse.toString();
+	        }
+	        org.jsoup.select.Elements scorerRows = scorerTable.select("tr");
+	        com.fasterxml.jackson.databind.node.ArrayNode scorerArray = objectMapper.createArrayNode();
+	        for (int r = headerRowIndex + 1; r < scorerRows.size(); r++) {
+	            org.jsoup.select.Elements cells = scorerRows.get(r).select("th,td");
+	            if (cells.size() < 6) continue;
+	            List<String> values = new ArrayList<>();
+	            for (org.jsoup.nodes.Element cell : cells) values.add(cell.text().trim().replaceAll("\\s+", " "));
+	            String player = values.get(0);
+	            String team = values.get(1);
+	            if (player.isEmpty() || team.isEmpty() || !values.get(2).matches("\\d+") || !values.get(3).matches("\\d+") || !values.get(4).matches("\\d+") || !values.get(5).matches("\\d+")) continue;
+	            ObjectNode scorer = objectMapper.createObjectNode();
+	            scorer.put("player", player);
+	            scorer.put("team", team);
+	            scorer.put("fieldGoals", Integer.parseInt(values.get(2)));
+	            scorer.put("penaltyCornerGoals", Integer.parseInt(values.get(3)));
+	            scorer.put("penaltyStrokeGoals", Integer.parseInt(values.get(4)));
+	            scorer.put("goals", Integer.parseInt(values.get(5)));
+	            scorerArray.add(scorer);
+	        }
+	        if (scorerArray.isEmpty()) {
+	            hockeyResponse.put("status", "failed");
+	            hockeyResponse.put("error", "No valid goal scorer records were found");
+	            return hockeyResponse.toString();
+	        }
+	        hockeyResponse.put("competitionUrl", hockeyUrl);
+	        hockeyResponse.set("individualGoalScorers", scorerArray);
+	        Path hockeyFolder = Paths.get(hockeyOutputFolder.trim());
+	        Files.createDirectories(hockeyFolder);
+	        Path hockeyFile = hockeyFolder.resolve("IndividualGoalScorers.json");
+	        objectMapper.writerWithDefaultPrettyPrinter().writeValue(hockeyFile.toFile(), hockeyResponse);
+	        ObjectNode hockeyResult = objectMapper.createObjectNode();
+	        hockeyResult.put("status", "success");
+	        hockeyResult.put("records", scorerArray.size());
+	        hockeyResult.put("file", hockeyFile.toAbsolutePath().toString());
+	        return hockeyResult.toString();
+	    } catch (Exception e) {
+	        hockeyResponse.put("status", "failed");
+	        hockeyResponse.put("error", e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage());
+	        return hockeyResponse.toString();
+	    }
+	}	
 }

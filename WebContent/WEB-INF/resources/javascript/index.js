@@ -1,6 +1,7 @@
 var session_auction, session_sports,live_match;
 var graphics,preGraphic='';
 var homeColour='blue',awayColour='#FF7F7F';awayTextColour='white',homeTextColour='white';
+var matchTimeInterval = null;
 const teams = {
         team1: {
             cornerTaken: 0,foulsWon: 0,shotOnTarget: 0,shots: 0,saves: 0,crosses: 0,passes: 0,accuratePass: 0,touches: 0,
@@ -46,7 +47,14 @@ function displayMatchTime() {
 }
 
 function startMatchTimeUpdate() {
-   matchTimeInterval = setInterval(displayMatchTime, parseInt($('#update_time').val()) * 3000);
+    clearInterval(matchTimeInterval);
+    var refreshSeconds = parseInt($('#update_time').val(), 10);
+    if (isNaN(refreshSeconds) || refreshSeconds < 1) refreshSeconds = 15;
+    console.log('Starting Asian Hockey refresh timer:', refreshSeconds, 'seconds');
+    matchTimeInterval = setInterval(function() {
+        console.log('Asian Hockey timer tick:', new Date().toLocaleTimeString());
+        displayMatchTime();
+    }, refreshSeconds * 1000);
 }
 
 function initialiseForm(whatToProcess,dataToProcess)
@@ -65,7 +73,18 @@ function initialiseForm(whatToProcess,dataToProcess)
 		document.getElementById('fixture_id').value = dataToProcess.fixture_id;
 		break;
 	}
-	if ($('#selectedBroadcaster').val().toUpperCase() === 'FOOTBALL') {
+	if ($('#selectedBroadcaster').val().toUpperCase() === 'ASIAN_HOCKEY_CHAMPIONS') {
+	    $('#api_match_name').hide();
+	    $('#source_file_path').hide();
+	    $('#destination_file_path').hide();
+	    $('#update_time').show();
+		$('#pre_match_name').hide();
+	    $('#vizPortNumber_div').hide();
+	    $('#vizIPAddress_div').hide();
+	    $('#fixture_id').hide();
+	    $('#hockey_source_url_div').show();
+	    $('#hockey_json_folder_div').show();
+	} else if ($('#selectedBroadcaster').val().toUpperCase() === 'FOOTBALL') {
         $('#api_match_name').hide();
         $('#source_file_path').hide();
         $('#destination_file_path').hide();
@@ -379,8 +398,14 @@ function afterPageLoad(whichPageHasLoaded)
 {
 	switch (whichPageHasLoaded) {
 	case 'API':
-		processApiProcedures('LOAD_MATCH');
-		break;
+	    if ($('#selectedBroadcaster').val().toUpperCase() === 'ASIAN_HOCKEY_CHAMPIONS') {
+	        graphics = 'ASIAN_HOCKEY_GOAL_SCORERS';
+	        processApiProcedures('READ-APIMATCH-AND-POPULATE');
+	        startMatchTimeUpdate();
+	    } else {
+	        processApiProcedures('LOAD_MATCH');
+	    }
+	    break;
 	}
 	switch ($('#selectedBroadcaster').val().toUpperCase()) {
 	case 'KHELO_INDIA':
@@ -448,7 +473,17 @@ function processUserSelection(whichInput)
 {	
 	  $(document).ready(function() {
             $('#selectedBroadcaster').change(function() {
-                if ($(this).val() === 'Football') {
+				if ($(this).val().toUpperCase() === 'ASIAN_HOCKEY_CHAMPIONS') {
+				    $('#api_match_name').hide();
+				    $('#source_file_path').hide();
+				    $('#destination_file_path').hide();
+				    $('#update_time').show();
+				    $('#vizPortNumber_div').hide();
+				    $('#vizIPAddress_div').hide();
+				    $('#fixture_id').hide();
+				    $('#hockey_source_url_div').show();
+				    $('#hockey_json_folder_div').show();
+				} else if ($(this).val() === 'Football') {
                     $('#api_match_name').hide();
                     $('#source_file_path').hide();
                     $('#destination_file_path').hide();
@@ -522,7 +557,7 @@ function processUserSelection(whichInput)
 			|| checkEmpty($('#vizPortNumber'),'Port Number Blank') == false) {
 			return false;
 		}*/
-	  	document.initialise_form.submit();
+	    document.initialise_form.submit();
 		break;
 	case 'cancel_graphics_btn':
 		switch ($('#selectedBroadcaster').val().toUpperCase()) {
@@ -576,17 +611,14 @@ function processApiProcedures(whatToProcess)
 		graphics = whatToProcess;
 		break;	
 	case 'READ-APIMATCH-AND-POPULATE':
-		value_to_process = graphics;
-		if (graphics !== preGraphic) {
-		    clearInterval(matchTimeInterval); // Clear the existing interval
-		    matchTimeInterval = setInterval(function() {
-		        processApiProcedures('READ-APIMATCH-AND-POPULATE', graphics);
-		    }, (parseInt($('#update_time').val()) || 1) * 1000);
-		    preGraphic = graphics;
-		}if (graphics != undefined &&preGraphic != '') {
-			blink();
-		}
-		break;		
+	    value_to_process = graphics;
+	    if (graphics !== preGraphic) {
+	        preGraphic = graphics;
+	    }
+	    if (graphics != undefined && preGraphic != '') {
+	        blink();
+	    }
+	    break;
 	}
 
 	$.ajax({    
@@ -601,7 +633,17 @@ function processApiProcedures(whatToProcess)
 				initialiseForm('UPDATE-CONFIG',data);
 				$(document).ready(function() {
 				    $('#selectedBroadcaster').change(function() {
-				        if ( $(this).val() === 'Football') {
+						if ($(this).val().toUpperCase() === 'ASIAN_HOCKEY_CHAMPIONS') {
+						    $('#api_match_name').hide();
+						    $('#source_file_path').hide();
+						    $('#destination_file_path').hide();
+						    $('#update_time').show();
+						    $('#vizPortNumber_div').hide();
+						    $('#vizIPAddress_div').hide();
+						    $('#fixture_id').hide();
+						    $('#hockey_source_url_div').show();
+						    $('#hockey_json_folder_div').show();
+						} else if ($(this).val() === 'Football') {
 				            $('#api_match_name').hide();
 				            $('#source_file_path').hide();
 				            $('#destination_file_path').hide();
@@ -697,32 +739,35 @@ function processApiProcedures(whatToProcess)
 				alert('Pre-Match file is created');
 				break;
 			case 'READ-APIMATCH-AND-POPULATE':
-			if(data &&  $(selectedBroadcaster).val() != 'Football' && $(selectedBroadcaster).val() != 'GOLF' 
-			&& $(selectedBroadcaster).val() != 'Basketball' && $(selectedBroadcaster).val() != 'AFC_Football'){
-					addItemsToList('LOAD_API',data);
-				}else if( $(selectedBroadcaster).val() === 'Football'){
-					setdata(data);
-				}else if( $(selectedBroadcaster).val() === 'GOLF'){
-					 updateConnectionSignal(data.status);
-				}else if ($(selectedBroadcaster).val() === 'Basketball') {
-				    if (data !== null && data !== undefined) {
-				        // Assuming INCP_SportEvent is separate, and you want to fetch it from somewhere else
-				        let INCP_SportEvent = data.INCP_SportEvent || null;  // Or fetch it elsewhere if not part of 'data'
-				        
-				        if (INCP_SportEvent) {
-				            dataFunction(INCP_SportEvent);
-				        } else {
-				            console.error("INCP_SportEvent is missing");
-				        }
-				    }
-				
-				    if (data.status) {
-				        document.getElementById('update').innerText = 'File Update: ' + data.status;
-				    }
-				}
-
-				match_data = data;
-				break;
+			    if ($('#selectedBroadcaster').val().toUpperCase() === 'ASIAN_HOCKEY_CHAMPIONS') {
+			        if (data && data.status === 'success') {
+			            console.log('Asian Hockey goal scorers refreshed:', data.records, data.file);
+			        } else {
+			            console.error('Asian Hockey refresh failed:', data ? data.error || data.status : 'Empty response');
+			        }
+			        break;
+			    }
+			    if (data && $('#selectedBroadcaster').val() !== 'Football' && $('#selectedBroadcaster').val() !== 'GOLF' && $('#selectedBroadcaster').val() !== 'Basketball' && $('#selectedBroadcaster').val() !== 'AFC_Football') {
+			        addItemsToList('LOAD_API', data);
+			    } else if ($('#selectedBroadcaster').val() === 'Football') {
+			        setdata(data);
+			    } else if ($('#selectedBroadcaster').val() === 'GOLF') {
+			        updateConnectionSignal(data.status);
+			    } else if ($('#selectedBroadcaster').val() === 'Basketball') {
+			        if (data !== null && data !== undefined) {
+			            let INCP_SportEvent = data.INCP_SportEvent || null;
+			            if (INCP_SportEvent) {
+			                dataFunction(INCP_SportEvent);
+			            } else {
+			                console.error("INCP_SportEvent is missing");
+			            }
+			        }
+			        if (data && data.status) {
+			            document.getElementById('update').innerText = 'File Update: ' + data.status;
+			        }
+			    }
+			    match_data = data;
+			    break;
 			case 'GET_MEDAL_TALLY_STATS':
         		if(confirm('Animate In?') == true){
 					switch(whatToProcess){
