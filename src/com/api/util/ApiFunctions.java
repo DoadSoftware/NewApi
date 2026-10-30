@@ -26,6 +26,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import com.api.model.auction.DraftPlayersResponse;
+import com.api.model.auction.PlayerMasterResponse;
 import com.api.model.basketball.INCP_PreMatch;
 import com.api.model.basketball.INCP_SportEvent;
 import com.api.model.boxing.Boxing;
@@ -96,6 +99,11 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class ApiFunctions {
 	
@@ -220,6 +228,50 @@ public class ApiFunctions {
 	            conn.disconnect();
 	        }
 	    }
+	}
+	public static DraftPlayersResponse readDraftedPlayer(String urlString) throws IOException {
+	    DraftPlayersResponse result = null;
+	    try {
+	        HttpClient client = HttpClient.newHttpClient();
+	        HttpRequest request = HttpRequest.newBuilder()
+	                .uri(URI.create(urlString))
+	                .GET()
+	                .build();
+	        java.net.http.HttpResponse<String> response = client.send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
+	        if (response.statusCode() != 200) {
+	            throw new IOException("HTTP " + response.statusCode());
+	        }
+	        Files.writeString(Path.of("C:\\Sports\\Auction\\drafted_players_summary.json"), response.body());
+
+	        ObjectMapper mapper = new ObjectMapper();
+	        result = mapper.readValue(response.body(), DraftPlayersResponse.class);
+	    } catch (InterruptedException e) {
+	        Thread.currentThread().interrupt();
+	        e.printStackTrace();
+	    }
+	    return result;
+	}
+	public static PlayerMasterResponse readMasterPlayer(String urlString) throws IOException {
+		PlayerMasterResponse results = null;
+	    try {
+	        HttpClient client = HttpClient.newHttpClient();
+	        HttpRequest request = HttpRequest.newBuilder()
+	                .uri(URI.create(urlString))
+	                .GET()
+	                .build();
+	        java.net.http.HttpResponse<String> response = client.send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
+	        if (response.statusCode() != 200) {
+	            throw new IOException("HTTP " + response.statusCode());
+	        }
+	        Files.writeString(Path.of("C:\\Sports\\Auction\\draft_playermaster.json"), response.body());
+
+	        ObjectMapper mapper = new ObjectMapper();
+	        results = mapper.readValue(response.body(), PlayerMasterResponse.class);
+	    } catch (InterruptedException e) {
+	        Thread.currentThread().interrupt();
+	        e.printStackTrace();
+	    }
+	    return results;
 	}
 	public static GolfScoresResponse readGolfScore(String urlString) throws IOException {
 

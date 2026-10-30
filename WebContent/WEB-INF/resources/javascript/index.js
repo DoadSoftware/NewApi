@@ -136,6 +136,14 @@ function initialiseForm(whatToProcess,dataToProcess)
         $('#vizPortNumber_div').hide();
         $('#vizIPAddress_div').hide();
         $('#fixture_id').hide();
+	}else if($('#selectedBroadcaster').val().toUpperCase() === 'AUCTION'){
+		$('#api_match_name').hide();
+        $('#source_file_path').hide();
+        $('#destination_file_path').hide();
+        $('#update_time').hide();
+        $('#vizPortNumber_div').hide();
+        $('#vizIPAddress_div').hide();
+        $('#fixture_id').hide();
 	} else {
         $('#api_match_name').show();
         $('#source_file_path').show();
@@ -163,7 +171,17 @@ function processUserSelectionData(whatToProcess,dataToProcess){
 				processApiProcedures('GOLFDRAWSRESPONSE');
 				break;	
 			}
-			break;	
+			break;
+		case "AUCTION":
+			switch(dataToProcess){
+			case 112:
+				processApiProcedures('AUCTION_ALL_PLAYER');
+				break;
+			case 113:
+				processApiProcedures('AUCTION_LIVEDATA');
+				break;
+			}
+			break;		
 		case "ISPL":
 			switch(dataToProcess){
 			case 112:
@@ -533,6 +551,14 @@ function processUserSelection(whichInput)
 			        $('#vizPortNumber_div').hide();
 			        $('#vizIPAddress_div').hide();
 			        $('#fixture_id').hide();
+				}else if($('#selectedBroadcaster').val().toUpperCase() === 'AUCTION'){
+					$('#api_match_name').hide();
+			        $('#source_file_path').hide();
+			        $('#destination_file_path').hide();
+			        $('#update_time').hide();
+			        $('#vizPortNumber_div').hide();
+			        $('#vizIPAddress_div').hide();
+			        $('#fixture_id').hide();
 				}else {
                     $('#api_match_name').show();
                     $('#source_file_path').show();
@@ -690,6 +716,14 @@ function processApiProcedures(whatToProcess)
 					        $('#vizPortNumber_div').hide();
 					        $('#vizIPAddress_div').hide();
 					        $('#fixture_id').hide();
+						}else if($('#selectedBroadcaster').val().toUpperCase() === 'AUCTION'){
+							$('#api_match_name').hide();
+					        $('#source_file_path').hide();
+					        $('#destination_file_path').hide();
+					        $('#update_time').hide();
+					        $('#vizPortNumber_div').hide();
+					        $('#vizIPAddress_div').hide();
+					        $('#fixture_id').hide();
 						}else {
 				            $('#api_match_name').show();
 				            $('#source_file_path').show();
@@ -723,6 +757,12 @@ function processApiProcedures(whatToProcess)
 			case 'GOLFTOURRESPONSE':
 			    alert(data.status);
 			    break;
+			case 'AUCTION_ALL_PLAYER':
+			    alert(data.status);
+			    break;
+			case 'AUCTION_LIVEDATA':
+			    alert(data.status);
+			    break;	
 			case "GOLFSCORESRESPONSE":
 				 alert(data.status);
 			    break; 
@@ -786,7 +826,6 @@ function processApiProcedures(whatToProcess)
 			case 'FOOTBALL_MATCH_PREVIEW': case 'FOOTBALL_MATCH_INSIGHTS2':case 'BASKETBALL_PRE_MATCH': case 'BASKETBALL_STATS':case 'FOOTBALL_STATS':case 'FOOTBALL_PRE_MATCH':
 			case 'CRICKET_BATTING_BUZZER': case 'CRICKET_BOWLING_BUZZER':
 				alert('File created Successfully')
-				
 				break;		
         	}
     		processWaitingButtonSpinner('END_WAIT_TIMER');
@@ -1630,6 +1669,21 @@ function setdata(dataToProcess) {
 				                  '<tbody><tr><td>F1</td><td>  TOURDATA / COURSEDATA / ENTRYDATA  </td></tr>' + 
 				                  '<tr><td>F2</td><td> SCOREDATA </td></tr>' + 
 				                  '<tr><td>F3</td><td> DRAWSDATA </td></tr>' + 
+				                  '</tbody>';
+				tables2Div.appendChild(label);
+				tables2Div.appendChild(table);
+				$("#select_div").show();
+		}else if ($('#selectedBroadcaster').val().toUpperCase() === 'AUCTION'){
+			const tables2Div = document.getElementById('select_div');;
+			 // Create a label for "File Update"
+			const label = document.createElement('label');
+			label.id = 'update';
+			//label.innerHTML = 'File Update';
+			 const table = document.createElement('table');
+				table.id = 'table'; table.className = '';
+				table.innerHTML = '<thead><tr><th>Key</th><th>FileName</th></tr></thead>' + 
+				                  '<tbody><tr><td>F1</td><td>  ALL PLAYER  </td></tr>' + 
+				                  '<tr><td>F2</td><td> DRAFTED PLAYER </td></tr>' + 
 				                  '</tbody>';
 				tables2Div.appendChild(label);
 				tables2Div.appendChild(table);

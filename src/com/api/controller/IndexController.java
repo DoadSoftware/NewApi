@@ -40,6 +40,8 @@ import com.api.model.kadamba.Match;
 import com.api.model.kadamba.Team;
 import com.api.model.khelo_india.KheloIndia;
 import com.api.model.tennis.Api_tennis;
+import com.api.model.auction.DraftPlayersResponse;
+import com.api.model.auction.PlayerMasterResponse;
 import com.api.model.boxing.Boxing;
 import com.api.model.football.CurrentMatchLineup;
 import com.api.model.football.LiveMatch;
@@ -209,6 +211,9 @@ public class IndexController
 			case ApiUtil.GOLF:
 				session_configuration = new Configurations(selectedBroadcaster,match_name,"","","","","",0);
 				break;
+			case ApiUtil.AUCTION:
+				session_configuration = new Configurations(selectedBroadcaster,match_name,"","","","","",0);
+				break;	
 			case ApiUtil.KHELO_INDIA: case ApiUtil.SWIMMING_TSR:  case ApiUtil.TENNIS: case ApiUtil.KABADDI_KADAMBA:
 			case ApiUtil.KABADDI:
 				session_configuration = new Configurations(selectedBroadcaster,match_name, pre_match_name,source_file_path,destination_file_path,update_time,
@@ -248,7 +253,7 @@ public class IndexController
 				JAXBContext.newInstance(Configurations.class).createMarshaller().marshal(session_configuration, 
 						new File(ApiUtil.SPORTS_DIRECTORY + ApiUtil.API_CONFIGURATIONS_DIRECTORY + configuration_file_name));
 				break;	
-			case ApiUtil.BASKETBALL: case ApiUtil.AFC_Football: case ApiUtil.BOXING: case ApiUtil.ISPL: case ApiUtil.GOLF:
+			case ApiUtil.BASKETBALL: case ApiUtil.AFC_Football: case ApiUtil.BOXING: case ApiUtil.ISPL: case ApiUtil.GOLF: case ApiUtil.AUCTION:
 				JAXBContext.newInstance(Configurations.class).createMarshaller().marshal(session_configuration, 
 						new File(ApiUtil.SPORTS_DIRECTORY + ApiUtil.API_CONFIGURATIONS_DIRECTORY + configuration_file_name));
 				break;
@@ -425,6 +430,48 @@ public class IndexController
 		        response1.put("status", "failed : exception");
 		        response1.put("error", e.getMessage());
 		        return response1.toString();
+		    }
+		case "AUCTION_ALL_PLAYER":
+			ObjectNode responsesss = objectMapper.createObjectNode();
+			String URL = "https://cloud.cricket-21.com/AuctionMasterapi/draft/draft_playermaster";
+			try {
+
+		        System.out.println("Calling API: " + URL);
+
+		        PlayerMasterResponse readMasterPlayer = ApiFunctions.readMasterPlayer(URL);
+		        if (readMasterPlayer == null) {
+		        	responsesss.put("status", "failed : File is NULL");
+		            return responsesss.toString();
+		        }
+		        responsesss.put("status", "success");
+		        return responsesss.toString();
+		    } catch (Exception e) {
+
+		        e.printStackTrace();   // <-- MOST IMPORTANT
+		        responsesss.put("status", "failed : exception");
+		        responsesss.put("error", e.getMessage());
+		        return responsesss.toString();
+		    }
+		case "AUCTION_LIVEDATA":
+			ObjectNode rspns = objectMapper.createObjectNode();
+			String link = "https://cloud.cricket-21.com/AuctionMasterapi/draft/drafted_players_summary";
+			try {
+
+		        System.out.println("Calling API: " + link);
+
+		        DraftPlayersResponse readDraftedPlayer = ApiFunctions.readDraftedPlayer(link);
+		        if (readDraftedPlayer == null) {
+		        	rspns.put("status", "failed : File is NULL");
+		            return rspns.toString();
+		        }
+		        rspns.put("status", "success");
+		        return rspns.toString();
+		    } catch (Exception e) {
+
+		        e.printStackTrace();   // <-- MOST IMPORTANT
+		        rspns.put("status", "failed : exception");
+		        rspns.put("error", e.getMessage());
+		        return rspns.toString();
 		    }
 		case "GOLFSCORESRESPONSE":
 			ObjectNode responsess = objectMapper.createObjectNode();

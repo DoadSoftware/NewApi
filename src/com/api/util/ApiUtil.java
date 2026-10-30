@@ -37,6 +37,7 @@ public class ApiUtil {
 	public final static String FOOTBALL = "Football";
 	public final static String SWIMMING_TSR = "SWIMMING_TSR";
 	public final static String GOLF = "GOLF";
+	public final static String AUCTION = "AUCTION";
 	public final static String KHELO_INDIA = "KHELO_INDIA";
 	public final static String AFC_Football = "AFC_Football";
 	public final static String KABADDI_GIPKL = "KABADDI_GIPKL";

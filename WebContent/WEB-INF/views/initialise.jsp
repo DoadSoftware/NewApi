@@ -188,6 +188,7 @@
 			      <select id="selectedBroadcaster" name="selectedBroadcaster" class="browser-default custom-select custom-select-sm" 
 			      		onchange="processUserSelection(this)">
 					  <option value="ASIAN_HOCKEY_CHAMPIONS">Asian Hockey Champions</option>
+			      		<option value="AUCTION">ADT AUCTION</option>
 			      	  <option value="Football">Football</option>
 			      	  <option value="Cricket">Cricket</option>
 			      	  <option value="AFC_Football">AFC Football</option>

@@ -30,6 +30,7 @@ com\api\model\football\Player.class
 com\api\model\football\Stat.class
 com\api\model\football\TeamOfficial.class
 com\api\model\kabaddi\InMatchData$CapturePoints.class
+com\api\model\auction\PlayerMasterResponse.class
 com\api\model\kabaddi\InMatchData$PhaseOfPlay.class
 com\api\model\tennis\Api_pre_match.class
 com\api\model\kabaddi\InMatchData$Player.class
@@ -42,6 +43,7 @@ com\api\model\boxing\Boxing.class
 com\api\model\football\Messages.class
 com\api\model\football\Country.class
 com\api\model\football\CurrentMatchPlayer.class
+com\api\model\auction\DraftPlayersResponse$RoundGroup.class
 com\api\model\kabaddi\InMatchData$TeamPlayersStatistics.class
 com\api\model\kadamba\Football_PointsTable$PointsTable.class
 com\api\model\basketball\INCP_SportEvent$SportEventDetails.class
@@ -61,6 +63,7 @@ com\api\model\kadamba\RaidPoints.class
 com\api\controller\IndexController.class
 com\api\model\kadamba\Configurations.class
 com\api\model\tennis\TeamPlayerStats.class
+com\api\model\auction\PlayerMasterResponse$Player.class
 com\api\model\football\PreviewContestant.class
 com\api\model\ispl\mvp_leaderBoard.class
 com\api\model\kabaddi\InMatchData$InMatch.class
@@ -128,7 +131,9 @@ com\api\model\kabaddi\InMatchData$PlayByPlay.class
 com\api\model\football\FinishPrediction.class
 com\api\model\kabaddi\InMatchData$TacklePoints.class
 com\api\model\basketball\INCP_SportEvent$Statistics$Totals$PlayerStatistics.class
+com\api\model\auction\DraftPlayersResponse$DraftData.class
 com\api\model\football\Configurations.class
+com\api\model\auction\DraftPlayersResponse$Player.class
 com\api\model\football\matchData.class
 com\api\model\football\ProvisionalLineups.class
 com\api\model\football\MatchPreview.class
@@ -160,6 +165,7 @@ com\api\model\kadamba\PlayByRaids.class
 com\api\model\football\Insight.class
 com\api\model\football\teamData.class
 com\api\model\football\PreviousMeetingsAnyComp.class
+com\api\model\auction\PlayerMasterResponse$PlayerStat.class
 com\api\model\stupa\Configurations.class
 com\api\model\kabaddi\InMatchData$SkillPoints.class
 com\api\model\football\possessionStats$intervalLength.class
@@ -180,7 +186,9 @@ com\api\model\tennis\Team.class
 com\api\model\football\TotalMinusCross.class
 com\api\model\tennis\Statistics.class
 com\api\model\tennis\API_Tournament$Winner.class
+com\api\model\auction\DraftPlayersResponse.class
 com\api\model\tennis\API_Tournament$Squad.class
+com\api\model\auction\DraftPlayersResponse$TeamGroup.class
 com\api\model\football\TournamentCalendar.class
 com\api\model\football\TotalMinusPV.class
 com\api\model\kadamba\play_by_play.class

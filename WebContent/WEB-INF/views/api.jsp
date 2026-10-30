@@ -140,7 +140,7 @@
     </div>
   </div>
  </div>
- 	<table class="table table-bordered table-striped text-center" style="width:350px; margin:10px auto;">
+ 	<!-- <table class="table table-bordered table-striped text-center" style="width:350px; margin:10px auto;">
     <thead class="table-dark">
         <tr>
             <th>Key Press</th>
@@ -157,7 +157,7 @@
             <td>Pre Match</td>
         </tr>
     </tbody>
-</table>		
+</table> -->		
  <input type="hidden" name="selectedBroadcaster" id="selectedBroadcaster" value="${session_selected_broadcaster}"/>
  <input type="hidden" name="api_match_name" id="api_match_name" value="${session_api_match_name}"/>
  <input type="hidden" name="source_file_path" id="source_file_path" value="${session_source_path}"/>
