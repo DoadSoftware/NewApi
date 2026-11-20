@@ -44,6 +44,7 @@ public class ApiUtil {
 	public final static String ISPL = "ISPL";
 	public final static String Cricket = "Cricket";
 	public final static String BOXING = "BOXING";
+	public final static String ILT20 = "ILT20";
 	
 	public final static String FOOTBALL_API_PATH = "https://api.performfeeds.com/soccerdata/";
 	

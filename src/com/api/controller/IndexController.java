@@ -224,7 +224,7 @@ public class IndexController
 				}
 				break;
 			case ApiUtil.FOOTBALL: case ApiUtil.BASKETBALL: case ApiUtil.AFC_Football: case ApiUtil.KABADDI_GIPKL: case ApiUtil.Cricket: 
-				case ApiUtil.BOXING:	
+			case ApiUtil.BOXING: case ApiUtil.ILT20:
 				session_configuration = new Configurations(selectedBroadcaster,match_name,source_file_path,destination_file_path,update_time,fixture_id);
 				break;
 			}
@@ -245,6 +245,10 @@ public class IndexController
 						new File(ApiUtil.KHELO_INDIA_DIRECTORY + ApiUtil.CONFIGURATIONS_DIRECTORY + configuration_file_name));
 				break;
 			case ApiUtil.Cricket:
+				JAXBContext.newInstance(Configurations.class).createMarshaller().marshal(session_configuration, 
+						new File(ApiUtil.SPORTS_DIRECTORY + ApiUtil.API_CONFIGURATIONS_DIRECTORY + configuration_file_name));
+				break;
+			case ApiUtil.ILT20:
 				JAXBContext.newInstance(Configurations.class).createMarshaller().marshal(session_configuration, 
 						new File(ApiUtil.SPORTS_DIRECTORY + ApiUtil.API_CONFIGURATIONS_DIRECTORY + configuration_file_name));
 				break;	
@@ -719,6 +723,28 @@ public class IndexController
 				                case "CRICKET_BOWLING_BUZZER":
 				                    source_path = "http://82.25.110.45/api/bolling-buzzer-list";
 				                    destination_path = "C:/Sports/Cricket/BOWLING_BUZZER.json";
+				                    ApiFunctions.cricketJsonToFile(source_path, destination_path);
+				                    return objectMapper.writeValueAsString(null).toString();
+				            }
+				            break; 
+
+				    }
+				    return null;	
+				case ApiUtil.ILT20:
+				    switch (whatToProcess.toUpperCase()) {
+
+				    	case "CRICKET_PREDICTOR":
+				            source_path = "https://cloud.cricket-21.com/CricketApi/api/master/WinPredictor?matchid=" + match_name + "&type=json";
+				            destination_path = "C:/Sports/Cricket/PREDICTOR.json";
+				            ApiFunctions.cricketJsonToFile(source_path, destination_path);
+				            return objectMapper.writeValueAsString(null).toString();
+
+				        case "READ-APIMATCH-AND-POPULATE":
+				            switch (valueToProcess.toUpperCase()) {
+
+				                case "CRICKET_PREDICTOR":
+				                    source_path = "https://cloud.cricket-21.com/CricketApi/api/master/WinPredictor?matchid=" + match_name + "&type=json";
+				                    destination_path = "C:/Sports/Cricket/PREDICTOR.json";
 				                    ApiFunctions.cricketJsonToFile(source_path, destination_path);
 				                    return objectMapper.writeValueAsString(null).toString();
 				            }

@@ -104,7 +104,8 @@ function initialiseForm(whatToProcess,dataToProcess)
         $('#fixture_id').hide();
     }else if ($('#selectedBroadcaster').val().toUpperCase() === 'BASKETBALL'||
     		$('#selectedBroadcaster').val().toUpperCase() === 'AFC_FOOTBALL'||
-    	$('#selectedBroadcaster').val().toUpperCase() === 'CRICKET') {
+    	$('#selectedBroadcaster').val().toUpperCase() === 'CRICKET' || 
+		$('#selectedBroadcaster').val().toUpperCase() === 'ILT20') {
         $('#api_match_name').show();
         $('#source_file_path').hide();
         $('#destination_file_path').hide();
@@ -355,7 +356,15 @@ function processUserSelectionData(whatToProcess,dataToProcess){
 					graphics = 'LIVE_DATA';
 					break;
 			}
-			break;	
+			break;
+			case 'ILT20':
+			switch(dataToProcess){
+					case 112:
+						processApiProcedures('CRICKET_PREDICTOR');
+						graphics = 'CRICKET_PREDICTOR';
+						break;
+					}
+			break;		
 		case 'CRICKET':
 		switch(dataToProcess){
 				case 112:
@@ -519,7 +528,7 @@ function processUserSelection(whichInput)
                     $('#vizIPAddress_div').show();
                     $('#fixture_id').hide();
                 } else if ($(this).val()=== 'Basketball'|| $(this).val()=== 'Cricket'
-                	||$(this).val().toUpperCase() === 'AFC_FOOTBALL') {
+                	||$(this).val().toUpperCase() === 'AFC_FOOTBALL' || $(this).val()=== 'ILT20') {
 			        $('#api_match_name').show();
 			        $('#source_file_path').hide();
 			        $('#destination_file_path').hide();
@@ -684,7 +693,8 @@ function processApiProcedures(whatToProcess)
 				            $('#update_time').hide();
 				            $('#vizPortNumber_div').show();
 				            $('#vizIPAddress_div').show();
-				        } else if ($(this).val()=== 'Basketball'|| $(this).val()=== 'Cricket'||$(this).val().toUpperCase() === 'AFC_FOOTBALL') {
+				        } else if ($(this).val()=== 'Basketball'|| $(this).val()=== 'Cricket'||$(this).val().toUpperCase() === 'AFC_FOOTBALL'
+									|| $(this).val()=== 'ILT20') {
 					        $('#api_match_name').show();
 					        $('#source_file_path').hide();
 				            $('#destination_file_path').hide();
@@ -824,7 +834,7 @@ function processApiProcedures(whatToProcess)
 			case 'FOOTBALL_MATCH_POSSESSION_VALUES': case 'FOOTBALL_MATCH_MOMENTUM': case 'POPULATE-PLAYER_MATCH_EVENT': case 'FOOTBALL_LIVE_TRACKING':
 			case 'FOOTBALL_GOALS_EXPECTED': case'FOOTBALL_MATCH_INSIGHTS': case'LIVE_DATA':case'SEASONAL_DATA': case 'CRICKET_BOWLERSTATS':case 'CRICKET_BATTERSTATS':
 			case 'FOOTBALL_MATCH_PREVIEW': case 'FOOTBALL_MATCH_INSIGHTS2':case 'BASKETBALL_PRE_MATCH': case 'BASKETBALL_STATS':case 'FOOTBALL_STATS':case 'FOOTBALL_PRE_MATCH':
-			case 'CRICKET_BATTING_BUZZER': case 'CRICKET_BOWLING_BUZZER':
+			case 'CRICKET_BATTING_BUZZER': case 'CRICKET_BOWLING_BUZZER': case 'CRICKET_PREDICTOR':
 				alert('File created Successfully')
 				break;		
         	}
