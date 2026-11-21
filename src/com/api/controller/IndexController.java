@@ -173,7 +173,7 @@ public class IndexController
 			@RequestParam(value = "update_time", required = false, defaultValue = "") String update_time,
 			@RequestParam(value = "fixture_id", required = false, defaultValue = "") String fixture_id,
 			@RequestParam(value = "selectedBroadcaster", required = false, defaultValue = "") String selectedBroadcaster,
-			@RequestParam(value = "competitionUrl", required = false, defaultValue = "https://tms.fih.ch/competitions/1942") String competitionUrl,
+			@RequestParam(value = "competitionUrl", required = false, defaultValue = "https://tms.fih.ch/competitions/1943") String competitionUrl,
 			@RequestParam(value = "jsonOutputFolder", required = false, defaultValue = "C:\\Sports\\Hockey\\") String jsonOutputFolder) 
 					throws Exception 
 	{
@@ -1220,7 +1220,7 @@ public class IndexController
 	        String hockeyOutputFolder = session_configuration.getJsonOutputFolder();
 			System.out.println("Hockey URL: " + hockeyUrl);
 			System.out.println("Hockey output folder: " + hockeyOutputFolder);
-	        if (hockeyUrl == null || hockeyUrl.trim().isEmpty()) hockeyUrl = "https://tms.fih.ch/competitions/1942";
+	        if (hockeyUrl == null || hockeyUrl.trim().isEmpty()) hockeyUrl = "https://tms.fih.ch/competitions/1943";
 	        if (hockeyOutputFolder == null || hockeyOutputFolder.trim().isEmpty()) hockeyOutputFolder = "C:\\Sports\\Hockey\\";
 	        org.jsoup.nodes.Document hockeyDocument = org.jsoup.Jsoup.connect(hockeyUrl.trim()).userAgent("Mozilla/5.0").timeout(20000).get();
 	        org.jsoup.select.Elements hockeyTables = hockeyDocument.select("table");
